@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import vn.webstore.webstore.domain.Images;
+import vn.webstore.webstore.domain.dto.UploadForm;
 import vn.webstore.webstore.repository.ImageRepository;
 import vn.webstore.webstore.service.Helper;
 import java.io.IOException;
@@ -26,12 +27,13 @@ public class UploadFileController {
     }
 
     @GetMapping("/upload/add")
-    public String add() {
+    public String add(Model model) {
+        model.addAttribute("uploadForm", new UploadForm()); // Khởi tạo đối tượng model
         return "templates/upload/add";
     }
 
     @PostMapping("/upload/add")
-    public String add(Model model,@RequestParam("f") @ModelAttribute("newImage") MultipartFile f ) {
+    public String add(MultipartFile f) {
         try {
             String fileName = Helper.saveFile("images", f, 32);
             Images image = new Images(0, fileName, f.getSize(), f.getContentType());
@@ -40,6 +42,6 @@ public class UploadFileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "templates/upload/add";
+        return "upload/add";
     }
 }

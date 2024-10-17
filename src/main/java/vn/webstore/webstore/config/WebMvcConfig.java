@@ -9,9 +9,8 @@ import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import java.nio.file.Path;  // Để biểu diễn đường dẫn của file
+import java.nio.file.Path; // Để biểu diễn đường dẫn của file
 import java.nio.file.Paths;
-
 
 @Configuration
 @EnableWebMvc
@@ -36,17 +35,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
         registry.addResourceHandler("/image/**").addResourceLocations("/resources/image/");
         registry.addResourceHandler("/client/**").addResourceLocations("/resources/client/");
+
+        String dirName = "images";
+        Path dir = Paths.get("images");
+        String uploadPath = dir.toFile().getAbsolutePath();
+        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/" + uploadPath + "/");
     }
 
-    @Configuration
-    public class MvcConfig implements WebMvcConfigurer {
-        @Override
-        public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            String dirName = "images";
-            Path dir = Paths.get("images");
-            String uploadPath = dir.toFile().getAbsolutePath();
-            registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"
-                    + uploadPath + "/");
-        }
-    }
 }
